@@ -79,11 +79,28 @@ run:
 Open <http://localhost:8000/> in your browser. Stop the server with `Ctrl+C`.
 On macOS or Linux, run `.venv/bin/python -m http.server 8000` instead.
 
+## Deploy the webpage to Vercel
+
+The Vercel deployment serves only the static `index.html` and `bonuses.json`;
+it does not run the Python scraper. The root `vercel.json` explicitly declares
+those static files so Vercel does not try to start the Python project as a web
+application.
+
+If this project is inside a subfolder of your Git repository, set Vercel's
+**Root Directory** to `casino-bonus-scraper` (the folder containing this
+README, `index.html`, and `vercel.json`). Leave the Framework Preset as
+**Other**, then redeploy. For updated bonus data, run the scraper locally and
+commit the refreshed `bonuses.json` before deploying.
+
+Do not add the Groq API key to Vercel: it is only needed when running the
+scraper locally, and the deployment is limited to the static page and data.
+
 ## Project files
 
 - `scrape.py` — scraper and Groq integration
 - `bonuses.json` — generated results
 - `index.html` — responsive results page
+- `vercel.json` — deploys the page and JSON as static files
 - `requirements.txt` — Python dependencies
 - `.env.example` — Groq settings template; copy to the ignored `.env`
 - `PROJECT_GUIDE.md` — detailed processing notes, troubleshooting, and review checklist

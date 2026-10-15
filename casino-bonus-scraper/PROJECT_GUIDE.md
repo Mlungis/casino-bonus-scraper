@@ -19,6 +19,7 @@ the source URL is included as traceability metadata.
 |---|---|
 | `scrape.py` | Checks robots rules, fetches source text, calls Groq, validates the extracted fields, and writes JSON. |
 | `index.html` | Fetches `bonuses.json` over HTTP and renders a responsive table. |
+| `vercel.json` | Configures Vercel to publish only the static page and generated JSON. |
 | `requirements.txt` | Python packages used by the scraper. |
 | `.env.example` | Template Groq API key and model settings. |
 | `WRITTEN_PART.md` | Production discussion and personal submission sections to complete honestly. |
@@ -50,6 +51,16 @@ of retries. Four API-adapter tests and Python compilation passed.
 The API key was shared in chat. Revoke it in Groq and replace it in `.env` with
 a newly generated key before further use. Do not include the key in this guide,
 source files, or screenshots.
+
+## Vercel deployment
+
+Vercel is configured to deploy only `index.html` and `bonuses.json` as static
+assets; the scraper itself runs locally and is not deployed as a Python web
+service. When the repository has a parent folder, set Vercel's Root Directory
+to `casino-bonus-scraper`, the folder containing `vercel.json`. Keep the
+Framework Preset set to **Other**. Regenerate the JSON locally and commit it
+when you want to publish updated results. The Groq key is not needed in Vercel
+environment variables.
 
 ## Windows quick start
 
