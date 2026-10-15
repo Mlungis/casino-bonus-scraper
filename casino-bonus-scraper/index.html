@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Casino Bonuses</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 16px; background: #f5f5f5; color: #222; }
+    h1 { font-size: 1.4rem; }
+    table { border-collapse: collapse; width: 100%; background: white; }
+    th, td { padding: 10px; border: 1px solid #ddd; text-align: left; }
+    th { background: #222; color: white; }
+
+    /* On small screens, turn each table row into a card. */
+    @media (max-width: 600px) {
+      table, thead, tbody, tr, td { display: block; }
+      thead { display: none; }
+      tr { margin-bottom: 12px; border: 1px solid #ddd; }
+      td { border: none; border-bottom: 1px solid #eee; }
+      td::before { content: attr(data-label) ": "; font-weight: bold; }
+    }
+  </style>
+</head>
+<body>
+  <h1>Casino Welcome Bonuses</h1>
+  <p id="message">Loading...</p>
+  <table id="table" hidden>
+    <thead>
+      <tr>
+        <th>Casino</th>
+        <th>Welcome bonus</th>
+        <th>Wagering (x)</th>
+        <th>Min. deposit</th>
+        <th>Source</th>
+      </tr>
+    </thead>
+    <tbody id="rows"></tbody>
+  </table>
+
+  <script>
+    // Add a cell to a row. textContent keeps the page safe from bad data.
+    function addCell(row, label, text) {
+      const td = document.createElement("td");
+      td.dataset.label = label;
+      td.textContent = text ?? "n/a";
+      row.appendChild(td);
+      return td;
+    }
+
+    fetch("bonuses.json")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (!Array.isArray(data)) {
+          throw new Error("Expected bonuses.json to contain an array.");
+        }
+        if (data.length === 0) {
+          document.getElementById("message").textContent =
+            "No bonus data found. Run the scraper and try again.";
+          return;
+        }
+
+        const rows = document.getElementById("rows");
+        data.forEach((item) => {
+          if (!item || typeof item !== "object" || Array.isArray(item)) {
+            throw new Error("Each bonus entry must be an object.");
+          }
+          const tr = document.createElement("tr");
+          addCell(tr, "Casino", item.casino);
+          addCell(tr, "Welcome bonus", item.welcome_bonus);
+          addCell(tr, "Wagering (x)", item.wagering_multiplier);
+          addCell(tr, "Min. deposit", item.min_deposit);
+
+          const sourceCell = addCell(tr, "Source", "");
+          let sourceUrl;
+          try {
+            sourceUrl = new URL(item.source_url);
+          } catch {
+            sourceUrl = null;
+          }
+          if (sourceUrl && ["http:", "https:"].includes(sourceUrl.protocol)) {
+            const a = document.createElement("a");
+            a.href = sourceUrl.href;
+            a.textContent = "Link";
+            a.target = "_blank";
+            a.rel = "noopener noreferrer";
+            sourceCell.appendChild(a);
+          }
+          rows.appendChild(tr);
+        });
+        document.getElementById("message").hidden = true;
+        document.getElementById("table").hidden = false;
+      })
+      .catch((error) => {
+        console.error("Could not load bonuses.json:", error);
+        document.getElementById("rows").replaceChildren();
+        document.getElementById("table").hidden = true;
+        document.getElementById("message").textContent =
+          "Could not load bonuses.json. Run the scraper and serve this folder over HTTP.";
+      });
+  </script>
+</body>
+</html>

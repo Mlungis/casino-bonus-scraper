@@ -1,0 +1,23 @@
+[
+  {
+    "casino": "Highroller Casino",
+    "welcome_bonus": "100% up to C$500",
+    "wagering_multiplier": 40.0,
+    "min_deposit": "C$20",
+    "source_url": "https://www.deucescracked.com/casino/bonus"
+  },
+  {
+    "casino": "Sports Interaction Casino",
+    "welcome_bonus": "100% up to 3000 CAD",
+    "wagering_multiplier": 30.0,
+    "min_deposit": "10 CAD",
+    "source_url": "https://www.deucescracked.com/casino/bonus"
+  },
+  {
+    "casino": "888 Casino",
+    "welcome_bonus": "100% up to $1,000 CAD",
+    "wagering_multiplier": 10.0,
+    "min_deposit": null,
+    "source_url": "https://www.deucescracked.com/casino/bonus"
+  }
+]

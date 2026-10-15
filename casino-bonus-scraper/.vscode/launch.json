@@ -1,0 +1,12 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run scraper",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scrape.py",
+      "console": "integratedTerminal"
+    }
+  ]
+}
